@@ -106,6 +106,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 @keyframes spin{to{transform:rotate(360deg)}}
 .online-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:5px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* NOVAS CLASSES PARA MOSTRAR OS PALPITES DOS OUTROS */
+.outros-palpites{padding:14px 16px;background:#f9fafb;border-top:1px solid var(--border)}
+.outros-palpites-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;letter-spacing:.5px}
+.outros-palpites-grid{display:flex;flex-wrap:wrap;gap:8px}
+.outro-p{background:white;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;display:flex;align-items:center;gap:6px;box-shadow:0 1px 2px rgba(0,0,0,0.02)}
+.outro-nick{font-weight:600;color:var(--text)}
+.outro-placar{font-weight:800;color:var(--azul);background:var(--verde-claro);padding:2px 6px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -114,7 +122,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="app-login">
   <div class="main login-wrap">
     <div class="login-card">
-      <div style="font-size:32px; font-weight:bold; color:var(--verde); margin-bottom:16px">FAMÍLIA COSTA E COSTELA</div>
+      <div style="font-size:52px;margin-bottom:16px">🇧🇷</div>
       <h2>Bolão Brasil 2026</h2>
       <p>Entre com seu apelido para dar palpites</p>
 
@@ -376,6 +384,33 @@ function renderJogos() {
         pontosHtml = `<span class="pts-jogo pts-${pts}">${pts===3?"🎯 3 pts":pts===1?"✓ 1 pt":"✗ 0 pts"}</span>`;
       }
 
+      // Lógica para carregar palpites dos adversários se o jogo estiver encerrado
+      let palpitesOutrosHtml = "";
+      if (encerrado) {
+        const listaPalpitesGalera = [];
+        for (const nick in palpites) {
+          if (nick !== userAtual && nick !== "Admin" && palpites[nick][j.id]) {
+            listaPalpitesGalera.push({ nick, p: palpites[nick][j.id] });
+          }
+        }
+        
+        if (listaPalpitesGalera.length > 0) {
+          palpitesOutrosHtml = `
+            <div class="outros-palpites">
+              <div class="outros-palpites-title">Palpites da Galera:</div>
+              <div class="outros-palpites-grid">
+                ${listaPalpitesGalera.map(x => `
+                  <div class="outro-p">
+                    <span class="outro-nick">${x.nick}</span>
+                    <span class="outro-placar">${x.p.gm} - ${x.p.gv}</span>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        }
+      }
+
       html += `<div class="jogo-card">
         <div class="jogo-header">
           <span class="jogo-meta">${j.grupo?j.grupo+" · ":""}${j.data||""}</span>
@@ -405,6 +440,7 @@ function renderJogos() {
             <button class="btn-salvar" id="btn-${j.id}" onclick="window.salvarPalpite(${j.id})" ${temP?"":"disabled"}>Salvar</button>
           ` : ""}
         </div>
+        ${palpitesOutrosHtml}
       </div>`;
     });
   });
@@ -448,6 +484,7 @@ function renderPlacar() {
 
   let html = `<div class="ranking-header"><h3>Classificação</h3></div>`;
   ranking.forEach((r, i) => {
+    if (r.nome === "Admin") return; // Oculta o admin do ranking
     const minha = r.nome === userAtual;
     html += `<div class="rank-card ${minha?"eu":""}">
       <div class="rank-pos ${posC[i]||""}">${i<3?med[i]:i+1}</div>
