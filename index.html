@@ -110,6 +110,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 </head>
 <body>
 
+<!-- ===== LOGIN ===== -->
 <div id="app-login">
   <div class="main login-wrap">
     <div class="login-card">
@@ -138,6 +139,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<!-- ===== APP ===== -->
 <div id="app-main" style="display:none">
   <div class="header">
     <div class="header-inner">
@@ -170,6 +172,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<!-- Firebase SDK -->
 <script type="module">
 // ─────────────────────────────────────────────
 //  🔧 SUBSTITUA PELOS SEUS DADOS DO FIREBASE
@@ -187,10 +190,10 @@ const FIREBASE_CONFIG = {
 
 const ADMIN_SENHA = "admin2026"; // mude depois de configurar
 
-// Jogos iniciais da fase de grupos
+// Jogos iniciais da fase de grupos atualizados para a Copa do Mundo Masculina de 2026 (Grupo C)
 const JOGOS_INICIAIS = [
- {id:1,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Marrocos",flag_m:"🇧🇷",flag_v:"🇲🇦",data:"13/06/2026",resultado:null,aberto:true},
-   {id:2,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Haiti",flag_m:"🇧🇷",flag_v:"🇭🇹",data:"19/06/2026",resultado:null,aberto:true},
+  {id:1,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Marrocos",flag_m:"🇧🇷",flag_v:"🇲🇦",data:"13/06/2026",resultado:null,aberto:true},
+  {id:2,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Haiti",flag_m:"🇧🇷",flag_v:"🇭🇹",data:"19/06/2026",resultado:null,aberto:true},
   {id:3,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Escócia",visitante:"Brasil",flag_m:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",flag_v:"🇧🇷",data:"24/06/2026",resultado:null,aberto:true},
 ];
 
@@ -488,17 +491,17 @@ function renderAdmin() {
       <div class="form-row">
         <div><span class="lbl">Fase</span>
           <select class="admin-select" id="af-fase">
-            <div><span class="lbl">Fase</span>
-			          <select class="admin-select" id="af-fase">
-			            <option>Fase de Grupos</option>
-			            <option>16-avos de Final</option>
-			            <option>Oitavas de Final</option>
-			            <option>Quartas de Final</option>
-			            <option>Semifinal</option>
-			            <option>Final</option>
-                    </select></div>
+            <option>Fase de Grupos</option>
+            <option>16-avos de Final</option>
+            <option>Oitavas de Final</option>
+            <option>Quartas de Final</option>
+            <option>Semifinal</option>
+            <option>Final</option>
+          </select>
+        </div>
         <div><span class="lbl">Grupo (opcional)</span>
-          <input class="admin-input" id="af-grupo" placeholder="ex: Grupo D"></div>
+          <input class="admin-input" id="af-grupo" placeholder="ex: Grupo D">
+        </div>
       </div>
       <div class="form-row">
         <div><span class="lbl">Mandante</span><input class="admin-input" id="af-mandante" placeholder="ex: Brasil"></div>
@@ -575,7 +578,6 @@ if (saved && CONFIGURED) {
 }
 
 // ── Eventos de Interface Estática (Listeners) ─────────────────
-// Aviso de configuração
 const warnClose = document.getElementById("fechar-warn");
 if (warnClose) {
   warnClose.addEventListener("click", (e) => {
@@ -584,7 +586,6 @@ if (warnClose) {
   });
 }
 
-// Botões e inputs de Login
 document.getElementById("btn-entrar").addEventListener("click", fazerLogin);
 
 document.getElementById("inp-nick").addEventListener("keydown", (e) => {
@@ -597,7 +598,6 @@ document.getElementById("inp-senha").addEventListener("keydown", (e) => {
 
 document.querySelector(".admin-link").addEventListener("click", toggleAdminLogin);
 
-// Botões de Navegação e Topo
 document.getElementById("btn-sair").addEventListener("click", sair);
 
 const navBtns = document.querySelectorAll(".nav-btn");
