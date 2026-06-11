@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão Brasil 2026</title>
+<style>
+:root{--verde:#009c3b;--amarelo:#ffdf00;--azul:#002776;--verde-claro:#e8f7ee;--bg:#f5f5f0;--card:#ffffff;--text:#1a1a1a;--text-muted:#6b6b6b;--border:rgba(0,0,0,0.1);--radius:12px;--radius-sm:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--azul);position:sticky;top:0;z-index:100}
+.header-inner{max-width:760px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo-text{color:white;font-weight:700;font-size:17px;letter-spacing:-.3px}
+.logo-sub{color:var(--amarelo);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;display:block}
+.user-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;color:white;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s}
+.user-badge:hover{background:rgba(255,255,255,.2)}
+.user-dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
+.nav{background:var(--azul);border-top:1px solid rgba(255,255,255,.1)}
+.nav-inner{max-width:760px;margin:0 auto;display:flex}
+.nav-btn{color:rgba(255,255,255,.6);font-size:13px;padding:10px 18px;cursor:pointer;border:none;background:none;font-weight:500;transition:all .15s;border-bottom:2px solid transparent}
+.nav-btn:hover{color:white}
+.nav-btn.active{color:var(--amarelo);border-bottom-color:var(--amarelo)}
+.main{max-width:760px;margin:0 auto;padding:24px 16px}
+.section{display:none}
+.section.active{display:block}
+.login-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center}
+.login-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:40px 36px;width:100%;max-width:380px;text-align:center}
+.login-card h2{font-size:22px;font-weight:700;margin-bottom:6px;color:var(--azul)}
+.login-card p{color:var(--text-muted);font-size:14px;margin-bottom:28px}
+.field{margin-bottom:14px;text-align:left}
+.field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.field input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;background:#fafafa;color:var(--text);outline:none;transition:border-color .15s}
+.field input:focus{border-color:var(--verde);background:white}
+.btn-primary{width:100%;padding:13px;background:var(--verde);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s;letter-spacing:.3px}
+.btn-primary:hover{opacity:.88}
+.btn-primary:disabled{opacity:.5;cursor:default}
+.login-hint{font-size:12px;color:var(--text-muted);margin-top:14px}
+.admin-link{font-size:12px;color:var(--verde);cursor:pointer;margin-top:12px;display:block;text-decoration:underline}
+.config-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;font-size:13px;color:#856404}
+.config-banner a{color:#0d6efd}
+.phase-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin:24px 0 12px;padding-left:4px}
+.fase-badge{display:inline-block;background:var(--azul);color:var(--amarelo);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+.jogo-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px;overflow:hidden;transition:box-shadow .15s}
+.jogo-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.jogo-header{padding:12px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.jogo-meta{font-size:11px;color:var(--text-muted);font-weight:500}
+.jogo-status-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.status-aberto{background:#dcfce7;color:#166534}
+.status-encerrado{background:#f3f4f6;color:#6b7280}
+.status-resultado{background:#fef9c3;color:#854d0e}
+.jogo-body{padding:14px 16px 16px;display:flex;align-items:center;gap:12px}
+.time{flex:1;text-align:center}
+.time-flag{font-size:28px;display:block;margin-bottom:4px}
+.time-nome{font-size:13px;font-weight:700;color:var(--azul)}
+.placar-area{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+.placar-input{width:44px;height:44px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:20px;font-weight:700;color:var(--text);background:#fafafa;outline:none;transition:all .15s;-moz-appearance:textfield}
+.placar-input::-webkit-outer-spin-button,.placar-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.placar-input:focus{border-color:var(--verde);background:white}
+.placar-input.locked{background:#f3f4f6;color:var(--text-muted);border-color:transparent;cursor:default}
+.placar-sep{font-size:18px;font-weight:700;color:var(--text-muted)}
+.jogo-footer{padding:0 16px 14px;display:flex;align-items:center;justify-content:space-between}
+.btn-salvar{padding:8px 20px;background:var(--verde);color:white;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-salvar:hover{opacity:.85}
+.btn-salvar:disabled{background:#d1d5db;cursor:default}
+.palpite-salvo{font-size:12px;color:#166534;font-weight:600;display:flex;align-items:center;gap:4px}
+.pts-jogo{font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+.pts-3{background:#fef9c3;color:#854d0e}
+.pts-1{background:#dcfce7;color:#166534}
+.pts-0{background:#fee2e2;color:#991b1b}
+.ranking-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ranking-header h3{font-size:17px;font-weight:700;color:var(--azul)}
+.rank-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px 18px;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s}
+.rank-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.rank-card.eu{border-color:var(--verde);background:var(--verde-claro)}
+.rank-pos{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--bg);color:var(--text-muted);flex-shrink:0}
+.rank-pos.top1{background:var(--amarelo);color:var(--azul)}
+.rank-pos.top2{background:#e2e8f0;color:#475569}
+.rank-pos.top3{background:#fed7aa;color:#7c2d12}
+.rank-nome{flex:1;font-weight:600;font-size:15px}
+.rank-pts-wrap{display:flex;flex-direction:column;align-items:flex-end}
+.rank-pts{font-size:20px;font-weight:800;color:var(--azul)}
+.rank-detail{font-size:11px;color:var(--text-muted)}
+.admin-section h3{font-size:17px;font-weight:700;color:var(--azul);margin-bottom:16px}
+.admin-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:20px;margin-bottom:16px}
+.admin-card h4{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.lbl{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px}
+.admin-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:#fafafa;outline:none;color:var(--text)}
+.admin-input:focus{border-color:var(--verde);background:white}
+.admin-select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:#fafafa;outline:none}
+.btn-admin{padding:10px 20px;background:var(--azul);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-admin:hover{opacity:.85}
+.resultado-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);gap:8px}
+.resultado-item:last-child{border-bottom:none}
+.resultado-jogo-nome{font-size:13px;font-weight:600}
+.resultado-jogo-atual{font-size:12px;color:var(--text-muted)}
+.resultado-inputs{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.res-input{width:36px;height:36px;border:1.5px solid var(--border);border-radius:6px;text-align:center;font-size:16px;font-weight:700;outline:none;-moz-appearance:textfield}
+.res-input::-webkit-outer-spin-button,.res-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.res-input:focus{border-color:var(--verde)}
+.btn-sm{padding:7px 12px;font-size:12px;font-weight:700;border:none;border-radius:6px;cursor:pointer;background:var(--verde);color:white;white-space:nowrap}
+.alert{padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;margin-bottom:12px}
+.alert-ok{background:#dcfce7;color:#166534}
+.alert-err{background:#fee2e2;color:#991b1b}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.online-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+
+<div id="app-login">
+  <div class="main login-wrap">
+    <div class="login-card">
+      <div style="font-size:52px;margin-bottom:16px">🇧🇷</div>
+      <h2>Bolão Brasil 2026</h2>
+      <p>Entre com seu apelido para dar palpites</p>
+
+      <div id="cfg-warn" class="config-banner" style="display:none">
+        ⚠️ Firebase não configurado. Edite as variáveis <code>FIREBASE_*</code> no topo do arquivo JS.
+        <a href="#" id="fechar-warn">fechar</a>
+      </div>
+
+      <div class="field">
+        <label>Seu apelido</label>
+        <input type="text" id="inp-nick" placeholder="ex: Zé Boleiro" maxlength="24" autocomplete="off">
+      </div>
+      <div class="field" id="wrap-senha" style="display:none">
+        <label>Senha do admin</label>
+        <input type="password" id="inp-senha" placeholder="••••••••">
+      </div>
+      <div id="login-err" class="alert alert-err" style="display:none"></div>
+      <button class="btn-primary" id="btn-entrar">Entrar no bolão</button>
+      <p class="login-hint">Não precisa criar conta. Seu apelido é sua identidade.</p>
+      <a class="admin-link">Sou o admin</a>
+    </div>
+  </div>
+</div>
+
+<div id="app-main" style="display:none">
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span style="font-size:26px;margin-right:10px">🇧🇷</span>
+        <div>
+          <div class="logo-text">Bolão Brasil</div>
+          <span class="logo-sub">Copa 2026</span>
+        </div>
+      </div>
+      <div class="user-badge" id="btn-sair">
+        <span class="user-dot"></span>
+        <span id="badge-nick">--</span>
+        <span style="opacity:.5">·</span>
+        <span style="opacity:.6;font-size:11px">sair</span>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-inner">
+        <button class="nav-btn active">Palpites</button>
+        <button class="nav-btn">Placar</button>
+        <button class="nav-btn" id="nav-admin" style="display:none">Admin ⚙️</button>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div id="sec-jogos" class="section active"></div>
+    <div id="sec-placar" class="section"></div>
+    <div id="sec-admin" class="section admin-section"></div>
+  </div>
+</div>
+
+<script type="module">
+// ─────────────────────────────────────────────
+//  🔧 SUBSTITUA PELOS SEUS DADOS DO FIREBASE
+// ─────────────────────────────────────────────
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyCJDlEjikgEdZcaeTC3SpkVqZLkfeXKfRg",
+  authDomain:        "bolao-brasil-2026-13b1c.firebaseapp.com",
+  databaseURL:       "https://bolao-brasil-2026-13b1c-default-rtdb.firebaseio.com",
+  projectId:         "bolao-brasil-2026-13b1c",
+  storageBucket:     "bolao-brasil-2026-13b1c.firebasestorage.app",
+  messagingSenderId: "571906905834",
+  appId:             "1:571906905834:web:fba3851a5ac17a9e3ea993"
+};
+// ─────────────────────────────────────────────
+
+const ADMIN_SENHA = "admin2026"; // mude depois de configurar
+
+// Jogos iniciais da fase de grupos
+const JOGOS_INICIAIS = [
+  {id:1,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"México",flag_m:"🇧🇷",flag_v:"🇲🇽",data:"18/06/2026",resultado:null,aberto:true},
+  {id:2,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"Equador",flag_m:"🇧🇷",flag_v:"🇪🇨",data:"22/06/2026",resultado:null,aberto:true},
+  {id:3,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"Alemanha",flag_m:"🇧🇷",flag_v:"🇩🇪",data:"26/06/2026",resultado:null,aberto:true},
+];
+
+// ── Firebase ──────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, get, update, onValue, child }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const CONFIGURED = FIREBASE_CONFIG.apiKey !== "COLE_AQUI";
+if (!CONFIGURED) document.getElementById("cfg-warn").style.display = "block";
+
+let db, jogosRef, palpitesRef, usuariosRef;
+if (CONFIGURED) {
+  const app = initializeApp(FIREBASE_CONFIG);
+  db          = getDatabase(app);
+  jogosRef    = ref(db, "jogos");
+  palpitesRef = ref(db, "palpites");
+  usuariosRef = ref(db, "usuarios");
+
+  // Inicializa jogos se banco estiver vazio
+  get(jogosRef).then(snap => {
+    if (!snap.exists()) {
+      const obj = {};
+      JOGOS_INICIAIS.forEach(j => { obj[j.id] = j; });
+      set(jogosRef, obj);
+    }
+  });
+}
+
+// ── Estado local (cache) ──────────────────────
+let jogos    = {};   // {id: jogo}
+let palpites = {};   // {nick: {jogoId: {gm,gv}}}
+let usuarios = {};   // {nick: true}
+let userAtual = null;
+let isAdmin   = false;
+
+// ── Listeners em tempo real ───────────────────
+function iniciarListeners() {
+  if (!CONFIGURED) return;
+
+  onValue(jogosRef, snap => {
+    jogos = snap.val() || {};
+    if (document.getElementById("sec-jogos").classList.contains("active")) renderJogos();
+    if (document.getElementById("sec-admin").classList.contains("active"))  renderAdmin();
+    renderPlacar();
+  });
+
+  onValue(palpitesRef, snap => {
+    palpites = snap.val() || {};
+    if (document.getElementById("sec-jogos").classList.contains("active")) renderJogos();
+    renderPlacar();
+  });
+
+  onValue(usuariosRef, snap => {
+    usuarios = snap.val() || {};
+    renderPlacar();
+  });
+}
+
+// ── Helpers ───────────────────────────────────
+function vencedor(gm, gv) {
+  return gm > gv ? "mandante" : gv > gm ? "visitante" : "empate";
+}
+
+function calcPontos(nick) {
+  let pts = 0, acertos = 0, exatos = 0;
+  Object.values(jogos).forEach(j => {
+    if (!j.resultado) return;
+    const p = (palpites[nick] || {})[j.id];
+    if (p === undefined || p === null) return;
+    const r = j.resultado;
+    if (p.gm === r.gm && p.gv === r.gv) { pts += 3; exatos++; acertos++; }
+    else if (vencedor(p.gm, p.gv) === vencedor(r.gm, r.gv)) { pts += 1; acertos++; }
+  });
+  return { pts, acertos, exatos };
+}
+
+// ── Login ─────────────────────────────────────
+function toggleAdminLogin() {
+  const w   = document.getElementById("wrap-senha");
+  const inp = document.getElementById("inp-nick");
+  const lnk = document.querySelector(".admin-link");
+  if (w.style.display === "none") {
+    w.style.display = "block"; inp.value = "Admin"; inp.disabled = true;
+    lnk.textContent = "← Voltar ao login normal";
+  } else {
+    w.style.display = "none"; inp.disabled = false; inp.value = "";
+    lnk.textContent = "Sou o admin";
+  }
+}
+
+async function fazerLogin() {
+  const nick  = document.getElementById("inp-nick").value.trim();
+  const senha = document.getElementById("inp-senha").value;
+  const err   = document.getElementById("login-err");
+  const btn   = document.getElementById("btn-entrar");
+  err.style.display = "none";
+
+  if (!nick) { err.textContent = "Digite seu apelido!"; err.style.display = "block"; return; }
+  if (!CONFIGURED) { err.textContent = "Configure o Firebase primeiro."; err.style.display = "block"; return; }
+
+  if (nick === "Admin") {
+    if (senha !== ADMIN_SENHA) { err.textContent = "Senha incorreta."; err.style.display = "block"; return; }
+    isAdmin = true;
+  } else {
+    isAdmin = false;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Entrando…';
+
+  try {
+    userAtual = nick;
+    await set(ref(db, `usuarios/${nick}`), true);
+    localStorage.setItem("bolao_user", JSON.stringify({ nick, admin: isAdmin }));
+
+    document.getElementById("app-login").style.display = "none";
+    document.getElementById("app-main").style.display  = "block";
+    document.getElementById("badge-nick").textContent  = nick;
+    if (isAdmin) document.getElementById("nav-admin").style.display = "inline-block";
+
+    iniciarListeners();
+    navTo("jogos", document.querySelectorAll(".nav-btn")[0]);
+  } catch(e) {
+    err.textContent = "Erro ao conectar. Verifique o Firebase.";
+    err.style.display = "block";
+  } finally {
+    btn.disabled = false; btn.innerHTML = "Entrar no bolão";
+  }
+}
+
+function sair() {
+  localStorage.removeItem("bolao_user");
+  userAtual = null; isAdmin = false;
+  document.getElementById("app-main").style.display  = "none";
+  document.getElementById("app-login").style.display = "block";
+  document.getElementById("inp-nick").value = "";
+  document.getElementById("inp-nick").disabled = false;
+  document.getElementById("inp-senha").value = "";
+  document.getElementById("wrap-senha").style.display = "none";
+  document.querySelector(".admin-link").textContent = "Sou o admin";
+  jogos = {}; palpites = {}; usuarios = {};
+}
+
+// ── Navegação ─────────────────────────────────
+function navTo(sec, btn) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("sec-" + sec).classList.add("active");
+  btn.classList.add("active");
+  if (sec === "jogos")  renderJogos();
+  if (sec === "placar") renderPlacar();
+  if (sec === "admin")  renderAdmin();
+}
+
+// ── Render Jogos ──────────────────────────────
+function renderJogos() {
+  const cont = document.getElementById("sec-jogos");
+  const lista = Object.values(jogos).sort((a,b) => a.id - b.id);
+  if (!lista.length) { cont.innerHTML = '<p style="color:var(--text-muted);padding:24px 0">Nenhum jogo cadastrado ainda.</p>'; return; }
+
+  const fases = {};
+  lista.forEach(j => { if (!fases[j.fase]) fases[j.fase] = []; fases[j.fase].push(j); });
+
+  let html = `<p style="font-size:12px;color:var(--text-muted);margin-bottom:16px"><span class="online-dot"></span>Placar atualizado em tempo real</p>`;
+
+  Object.entries(fases).forEach(([fase, jogosF]) => {
+    html += `<div class="phase-label"><span class="fase-badge">${fase}</span></div>`;
+    jogosF.forEach(j => {
+      const meuP     = (palpites[userAtual] || {})[j.id];
+      const temP     = meuP !== undefined && meuP !== null;
+      const resultado = j.resultado;
+      const encerrado = !j.aberto || resultado;
+
+      let pontosHtml = "";
+      if (resultado && temP) {
+        let pts = 0;
+        if (meuP.gm === resultado.gm && meuP.gv === resultado.gv) pts = 3;
+        else if (vencedor(meuP.gm, meuP.gv) === vencedor(resultado.gm, resultado.gv)) pts = 1;
+        pontosHtml = `<span class="pts-jogo pts-${pts}">${pts===3?"🎯 3 pts":pts===1?"✓ 1 pt":"✗ 0 pts"}</span>`;
+      }
+
+      html += `<div class="jogo-card">
+        <div class="jogo-header">
+          <span class="jogo-meta">${j.grupo?j.grupo+" · ":""}${j.data||""}</span>
+          ${resultado
+            ? `<span class="jogo-status-badge status-resultado">Resultado: ${resultado.gm}–${resultado.gv}</span>`
+            : j.aberto
+              ? '<span class="jogo-status-badge status-aberto">Aberto</span>'
+              : '<span class="jogo-status-badge status-encerrado">Encerrado</span>'}
+        </div>
+        <div class="jogo-body">
+          <div class="time"><span class="time-flag">${j.flag_m}</span><span class="time-nome">${j.mandante}</span></div>
+          <div class="placar-area">
+            <input class="placar-input${encerrado?" locked":""}" type="number" min="0" max="20"
+              id="pm-${j.id}" value="${temP?meuP.gm:""}" placeholder="–" ${encerrado?"readonly disabled":""}
+              oninput="window.ativarBotao(${j.id})">
+            <span class="placar-sep">×</span>
+            <input class="placar-input${encerrado?" locked":""}" type="number" min="0" max="20"
+              id="pv-${j.id}" value="${temP?meuP.gv:""}" placeholder="–" ${encerrado?"readonly disabled":""}
+              oninput="window.ativarBotao(${j.id})">
+          </div>
+          <div class="time"><span class="time-flag">${j.flag_v}</span><span class="time-nome">${j.visitante}</span></div>
+        </div>
+        <div class="jogo-footer">
+          ${pontosHtml || (encerrado?'<span style="font-size:12px;color:var(--text-muted)">Encerrado</span>':'')}
+          ${j.aberto && !resultado ? `
+            <span id="saved-${j.id}" class="palpite-salvo" style="display:${temP?"flex":"none"}">✓ Salvo</span>
+            <button class="btn-salvar" id="btn-${j.id}" onclick="window.salvarPalpite(${j.id})" ${temP?"":"disabled"}>Salvar</button>
+          ` : ""}
+        </div>
+      </div>`;
+    });
+  });
+  cont.innerHTML = html;
+}
+
+window.ativarBotao = function(id) {
+  const pm  = document.getElementById(`pm-${id}`);
+  const pv  = document.getElementById(`pv-${id}`);
+  const btn = document.getElementById(`btn-${id}`);
+  if (btn) btn.disabled = !(pm?.value !== "" && pv?.value !== "");
+};
+
+window.salvarPalpite = async function(jogoId) {
+  const pm  = document.getElementById(`pm-${jogoId}`);
+  const pv  = document.getElementById(`pv-${jogoId}`);
+  if (!pm || !pv || pm.value === "" || pv.value === "") return;
+  const btn = document.getElementById(`btn-${jogoId}`);
+  if (btn) { btn.disabled = true; btn.textContent = "…"; }
+  try {
+    await set(ref(db, `palpites/${userAtual}/${jogoId}`), { gm: parseInt(pm.value), gv: parseInt(pv.value) });
+    const saved = document.getElementById(`saved-${jogoId}`);
+    if (saved) saved.style.display = "flex";
+    if (btn) { btn.textContent = "Salvo ✓"; setTimeout(() => { btn.textContent = "Salvar"; btn.disabled = false; }, 1500); }
+  } catch(e) {
+    if (btn) { btn.textContent = "Erro"; btn.disabled = false; }
+  }
+};
+
+// ── Render Placar ─────────────────────────────
+function renderPlacar() {
+  const cont = document.getElementById("sec-placar");
+  const nicks = Object.keys(usuarios);
+  if (!nicks.length) { cont.innerHTML = '<p style="color:var(--text-muted);padding:24px 0">Nenhum participante ainda.</p>'; return; }
+
+  const ranking = nicks.map(n => ({ nome: n, ...calcPontos(n) }))
+    .sort((a,b) => b.pts - a.pts || b.exatos - a.exatos || b.acertos - a.acertos);
+
+  const posC = ["top1","top2","top3"];
+  const med  = ["🥇","🥈","🥉"];
+
+  let html = `<div class="ranking-header"><h3>Classificação</h3></div>`;
+  ranking.forEach((r, i) => {
+    const minha = r.nome === userAtual;
+    html += `<div class="rank-card ${minha?"eu":""}">
+      <div class="rank-pos ${posC[i]||""}">${i<3?med[i]:i+1}</div>
+      <div class="rank-nome">${r.nome}${minha?' <span style="font-size:11px;color:var(--verde)">(você)</span>':""}</div>
+      <div class="rank-pts-wrap">
+        <span class="rank-pts">${r.pts}</span>
+        <span class="rank-detail">${r.exatos} exatos · ${r.acertos} certos</span>
+      </div>
+    </div>`;
+  });
+  html += `<p style="font-size:12px;color:var(--text-muted);margin-top:16px;text-align:center">🎯 Placar exato = 3 pts &nbsp;·&nbsp; ✓ Vencedor certo = 1 pt</p>`;
+  cont.innerHTML = html;
+}
+
+// ── Render Admin ──────────────────────────────
+function renderAdmin() {
+  const cont = document.getElementById("sec-admin");
+  const lista = Object.values(jogos).sort((a,b) => a.id - b.id);
+
+  let resHtml = lista.map(j => {
+    const r = j.resultado || {};
+    return `<div class="resultado-item">
+      <div>
+        <div class="resultado-jogo-nome">${j.flag_m} ${j.mandante} × ${j.visitante} ${j.flag_v}</div>
+        <div class="resultado-jogo-atual">${j.data||""} · ${j.resultado?"Resultado: "+j.resultado.gm+"–"+j.resultado.gv:"Sem resultado"} · ${j.aberto?"Aberto":"Fechado"}</div>
+      </div>
+      <div class="resultado-inputs">
+        <input class="res-input" type="number" min="0" max="20" id="rgm-${j.id}" value="${r.gm??""}" placeholder="–">
+        <span style="font-weight:700;color:var(--text-muted)">×</span>
+        <input class="res-input" type="number" min="0" max="20" id="rgv-${j.id}" value="${r.gv??""}" placeholder="–">
+        <button class="btn-sm" onclick="window.salvarResultado(${j.id})">✓ salvar</button>
+        <button class="btn-sm" style="background:${j.aberto?"#dc2626":"#2563eb"}" onclick="window.toggleAberto(${j.id})">${j.aberto?"Fechar":"Abrir"}</button>
+      </div>
+    </div>`;
+  }).join("") || '<p style="color:var(--text-muted);font-size:14px">Nenhum jogo.</p>';
+
+  cont.innerHTML = `
+    <h3>Painel do Admin</h3>
+    <div class="admin-card">
+      <h4>Adicionar jogo</h4>
+      <div class="form-row">
+        <div><span class="lbl">Fase</span>
+          <select class="admin-select" id="af-fase">
+            <option>Fase de Grupos</option><option>Oitavas de Final</option>
+            <option>Quartas de Final</option><option>Semifinal</option><option>Final</option>
+          </select></div>
+        <div><span class="lbl">Grupo (opcional)</span>
+          <input class="admin-input" id="af-grupo" placeholder="ex: Grupo D"></div>
+      </div>
+      <div class="form-row">
+        <div><span class="lbl">Mandante</span><input class="admin-input" id="af-mandante" placeholder="ex: Brasil"></div>
+        <div><span class="lbl">Flag mandante 🏳️</span><input class="admin-input" id="af-fm" placeholder="🇧🇷" style="font-size:20px"></div>
+      </div>
+      <div class="form-row">
+        <div><span class="lbl">Visitante</span><input class="admin-input" id="af-visitante" placeholder="ex: Argentina"></div>
+        <div><span class="lbl">Flag visitante 🏳️</span><input class="admin-input" id="af-fv" placeholder="🇦🇷" style="font-size:20px"></div>
+      </div>
+      <div class="form-row">
+        <div><span class="lbl">Data</span><input class="admin-input" id="af-data" placeholder="dd/mm/aaaa"></div>
+        <div></div>
+      </div>
+      <div id="af-alert" style="display:none"></div>
+      <button class="btn-admin" onclick="window.adicionarJogo()">Adicionar jogo</button>
+    </div>
+
+    <div class="admin-card">
+      <h4>Resultados dos jogos</h4>
+      ${resHtml}
+      <p style="font-size:11px;color:var(--text-muted);margin-top:12px">Salve o placar → pontos são calculados automaticamente. "Fechar" impede novos palpites.</p>
+    </div>
+
+    <div class="admin-card">
+      <h4>Participantes (${Object.keys(usuarios).length})</h4>
+      ${Object.keys(usuarios).map(u=>`<span style="display:inline-block;background:var(--bg);border-radius:20px;padding:4px 12px;font-size:13px;margin:3px">${u}</span>`).join("") || '<p style="color:var(--text-muted);font-size:14px">Nenhum ainda.</p>'}
+    </div>`;
+}
+
+window.salvarResultado = async function(jogoId) {
+  const gm = document.getElementById(`rgm-${jogoId}`);
+  const gv = document.getElementById(`rgv-${jogoId}`);
+  if (!gm||!gv||gm.value===""|gv.value==="") return alert("Informe os dois placares.");
+  await update(ref(db, `jogos/${jogoId}`), { resultado: { gm: parseInt(gm.value), gv: parseInt(gv.value) }, aberto: false });
+};
+
+window.toggleAberto = async function(jogoId) {
+  const j = jogos[jogoId];
+  if (!j) return;
+  await update(ref(db, `jogos/${jogoId}`), { aberto: !j.aberto });
+};
+
+window.adicionarJogo = async function() {
+  const fase     = document.getElementById("af-fase").value;
+  const grupo    = document.getElementById("af-grupo").value.trim();
+  const mandante = document.getElementById("af-mandante").value.trim();
+  const visitante= document.getElementById("af-visitante").value.trim();
+  const fm       = document.getElementById("af-fm").value.trim() || "🏳️";
+  const fv       = document.getElementById("af-fv").value.trim() || "🏳️";
+  const data     = document.getElementById("af-data").value.trim();
+  const alertEl  = document.getElementById("af-alert");
+
+  if (!mandante||!visitante) {
+    alertEl.className="alert alert-err"; alertEl.textContent="Informe os dois times."; alertEl.style.display="block"; return;
+  }
+  const ids = Object.keys(jogos).map(Number);
+  const novoId = ids.length ? Math.max(...ids) + 1 : 1;
+  await set(ref(db, `jogos/${novoId}`), { id:novoId, fase, grupo, mandante, visitante, flag_m:fm, flag_v:fv, data, resultado:null, aberto:true });
+  alertEl.className="alert alert-ok"; alertEl.textContent="Jogo adicionado!"; alertEl.style.display="block";
+  setTimeout(()=>{ alertEl.style.display="none"; },2500);
+  ["af-grupo","af-mandante","af-visitante","af-fm","af-fv","af-data"].forEach(id=>{ document.getElementById(id).value=""; });
+};
+
+// ── Auto-login ────────────────────────────────
+const saved = localStorage.getItem("bolao_user");
+if (saved && CONFIGURED) {
+  const d = JSON.parse(saved);
+  userAtual = d.nick; isAdmin = d.admin || false;
+  document.getElementById("app-login").style.display = "none";
+  document.getElementById("app-main").style.display  = "block";
+  document.getElementById("badge-nick").textContent  = userAtual;
+  if (isAdmin) document.getElementById("nav-admin").style.display = "inline-block";
+  iniciarListeners();
+}
+
+// ── Eventos de Interface Estática (Listeners) ─────────────────
+// Aviso de configuração
+const warnClose = document.getElementById("fechar-warn");
+if (warnClose) {
+  warnClose.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById('cfg-warn').style.display = 'none';
+  });
+}
+
+// Botões e inputs de Login
+document.getElementById("btn-entrar").addEventListener("click", fazerLogin);
+
+document.getElementById("inp-nick").addEventListener("keydown", (e) => {
+  if (e.key === 'Enter') fazerLogin();
+});
+
+document.getElementById("inp-senha").addEventListener("keydown", (e) => {
+  if (e.key === 'Enter') fazerLogin();
+});
+
+document.querySelector(".admin-link").addEventListener("click", toggleAdminLogin);
+
+// Botões de Navegação e Topo
+document.getElementById("btn-sair").addEventListener("click", sair);
+
+const navBtns = document.querySelectorAll(".nav-btn");
+navBtns[0].addEventListener("click", function() { navTo('jogos', this); });
+navBtns[1].addEventListener("click", function() { navTo('placar', this); });
+navBtns[2].addEventListener("click", function() { navTo('admin', this); });
+
+</script>
+</body>
+</html>
