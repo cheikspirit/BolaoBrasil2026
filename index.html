@@ -393,7 +393,7 @@ function renderJogos() {
             listaPalpitesGalera.push({ nick, p: palpites[nick][j.id] });
           }
         }
-        
+
         if (listaPalpitesGalera.length > 0) {
           palpitesOutrosHtml = `
             <div class="outros-palpites">
@@ -486,8 +486,9 @@ function renderPlacar() {
   ranking.forEach((r, i) => {
     if (r.nome === "Admin") return; // Oculta o admin do ranking
     const minha = r.nome === userAtual;
-    html += `<div class="rank-card ${minha?"eu":""}">
-      <div class="rank-pos ${posC[i]||""}">${i<3?med[i]:i+1}</div>
+    const temPonto = r.pts > 0;
+	    html += `<div class="rank-card ${minha?"eu":""}">
+      <div class="rank-pos ${temPonto && i<3 ? posC[i] : ""}">${temPonto && i<3 ? med[i] : i+1}</div>
       <div class="rank-nome">${r.nome}${minha?' <span style="font-size:11px;color:var(--verde)">(você)</span>':""}</div>
       <div class="rank-pts-wrap">
         <span class="rank-pts">${r.pts}</span>
