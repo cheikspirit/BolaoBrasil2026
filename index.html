@@ -189,9 +189,9 @@ const ADMIN_SENHA = "admin2026"; // mude depois de configurar
 
 // Jogos iniciais da fase de grupos
 const JOGOS_INICIAIS = [
-  {id:1,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"México",flag_m:"🇧🇷",flag_v:"🇲🇽",data:"18/06/2026",resultado:null,aberto:true},
-  {id:2,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"Equador",flag_m:"🇧🇷",flag_v:"🇪🇨",data:"22/06/2026",resultado:null,aberto:true},
-  {id:3,fase:"Fase de Grupos",grupo:"Grupo D",mandante:"Brasil",visitante:"Alemanha",flag_m:"🇧🇷",flag_v:"🇩🇪",data:"26/06/2026",resultado:null,aberto:true},
+ {id:1,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Marrocos",flag_m:"🇧🇷",flag_v:"🇲🇦",data:"13/06/2026",resultado:null,aberto:true},
+   {id:2,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Brasil",visitante:"Haiti",flag_m:"🇧🇷",flag_v:"🇭🇹",data:"19/06/2026",resultado:null,aberto:true},
+  {id:3,fase:"Fase de Grupos",grupo:"Grupo C",mandante:"Escócia",visitante:"Brasil",flag_m:"🏴󠁧󠁢󠁳󠁣󠁴󠁿",flag_v:"🇧🇷",data:"24/06/2026",resultado:null,aberto:true},
 ];
 
 // ── Firebase ──────────────────────────────────
@@ -488,8 +488,15 @@ function renderAdmin() {
       <div class="form-row">
         <div><span class="lbl">Fase</span>
           <select class="admin-select" id="af-fase">
-            <option>Fase de Grupos</option><option>Oitavas de Final</option>
-            <option>Quartas de Final</option><option>Semifinal</option><option>Final</option>
+            <div><span class="lbl">Fase</span>
+			          <select class="admin-select" id="af-fase">
+			            <option>Fase de Grupos</option>
+			            <option>16-avos de Final</option>
+			            <option>Oitavas de Final</option>
+			            <option>Quartas de Final</option>
+			            <option>Semifinal</option>
+			            <option>Final</option>
+          </select></div>
           </select></div>
         <div><span class="lbl">Grupo (opcional)</span>
           <input class="admin-input" id="af-grupo" placeholder="ex: Grupo D"></div>
