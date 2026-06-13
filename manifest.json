@@ -1,0 +1,15 @@
+{
+  "name": "Bolão Brasil 2026",
+  "short_name": "Bolão 2026",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f5f5f0",
+  "theme_color": "#002776",
+  "icons": [
+    {
+      "src": "icone.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
